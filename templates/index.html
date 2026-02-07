@@ -155,11 +155,144 @@
             transform: scale(1.05);
             box-shadow: 0 4px 10px rgba(39, 174, 96, 0.4);
         }
+        .itinerary-section {
+            margin-top: 40px;
+            border-top: 3px solid #667eea;
+            padding-top: 30px;
+        }
+        .itinerary-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border-left: 5px solid #ff9800;
+            transition: transform 0.3s ease;
+        }
+        .itinerary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+        .itinerary-card h3 {
+            color: #d84315;
+            margin-top: 0;
+        }
+        .itinerary-info {
+            color: #555;
+            font-size: 0.95em;
+            margin: 8px 0;
+        }
+        .itinerary-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+        }
+        .view-btn {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9em;
+            transition: transform 0.2s ease;
+        }
+        .view-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.4);
+        }
+        .delete-itinerary-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: transform 0.2s ease;
+        }
+        .delete-itinerary-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.4);
+        }
+        .days-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .days-input input {
+            width: 100px;
+        }
     </style>
 </head>
 <body>
     <h1>✈️ Travel Blog</h1>
     
+    <div class="container">
+        <div class="form-container">
+            <h2>🗺️ Build Your Itinerary</h2>
+            <form method="POST" action="/generate_itinerary">
+                <input type="text" name="itinerary_title" placeholder="Itinerary Title (e.g., My Goa Adventure)" required>
+                
+                <label for="itinerary_location">📍 Select Destination:</label>
+                <select name="itinerary_location" id="itinerary_location" required>
+                    <option value="">-- Choose a location --</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Agra">Agra</option>
+                    <option value="Varanasi">Varanasi</option>
+                    <option value="Jaipur">Jaipur</option>
+                    <option value="Udaipur">Udaipur</option>
+                    <option value="Pondicherry">Pondicherry</option>
+                    <option value="Shimla">Shimla</option>
+                    <option value="Manali">Manali</option>
+                    <option value="Leh Ladakh">Leh Ladakh</option>
+                    <option value="Kashmir">Kashmir</option>
+                    <option value="Bangalore">Bangalore</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Kolkata">Kolkata</option>
+                    <option value="Ayodhya">Ayodhya</option>
+                </select>
+
+                <label for="itinerary_days">📅 Number of Days:</label>
+                <div class="days-input">
+                    <input type="number" name="itinerary_days" id="itinerary_days" min="1" max="10" value="3" required>
+                    <span style="color: #666; font-size: 0.9em;">(Choose 1-10 days)</span>
+                </div>
+                
+                <button type="submit">Generate Itinerary</button>
+            </form>
+        </div>
+
+        <div class="itinerary-section">
+            <h2>📋 Your Itineraries</h2>
+            {% if itineraries %}
+                {% for itinerary in itineraries %}
+                <div class="itinerary-card">
+                    <h3>{{ itinerary.title }}</h3>
+                    <p class="itinerary-info">📍 Location: <strong>{{ itinerary.location }}</strong></p>
+                    <p class="itinerary-info">📅 Duration: <strong>{{ itinerary.duration }} day(s)</strong></p>
+                    <p class="itinerary-info">🕒 Created: {{ itinerary.created_date.strftime('%B %d, %Y at %H:%M') }}</p>
+                    <div class="itinerary-actions">
+                        <a href="/itinerary/{{ itinerary.id }}" class="view-btn">📖 View & Edit</a>
+                        <form method="POST" action="/delete_itinerary/{{ itinerary.id }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this itinerary?');">
+                            <button type="submit" class="delete-itinerary-btn">🗑️ Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="text-align: center; color: #7f8c8d; padding: 20px;">No itineraries yet. Create one to get started! 🌍</p>
+            {% endif %}
+        </div>
+
     <div class="container">
         <div class="form-container">
             <h2>Add a New Post</h2>
