@@ -52,6 +52,58 @@ class ItineraryService:
         return new_itinerary
 
     @staticmethod
+    def estimate_cost(location, duration, participants=1):
+        """Estimate travel cost based on location, duration, and participant count."""
+        # Default baseline rates (per person per day in INR)
+        default_rates = {
+            'accommodation': 2500,
+            'food': 800,
+            'transport': 600,
+            'activities': 1200
+        }
+
+        location_overrides = {
+            'Goa': {'accommodation': 3200, 'food': 900, 'transport': 700, 'activities': 1600},
+            'Kerala': {'accommodation': 2800, 'food': 750, 'transport': 550, 'activities': 1400},
+            'Rajasthan': {'accommodation': 2600, 'food': 700, 'transport': 650, 'activities': 1500},
+            'Himachal Pradesh': {'accommodation': 2300, 'food': 700, 'transport': 600, 'activities': 1300},
+            'Uttarakhand': {'accommodation': 2400, 'food': 720, 'transport': 620, 'activities': 1350},
+            'Dehradun': {'accommodation': 2200, 'food': 650, 'transport': 550, 'activities': 1200},
+            'Mumbai': {'accommodation': 4200, 'food': 1100, 'transport': 900, 'activities': 1800},
+            'Delhi': {'accommodation': 3800, 'food': 1000, 'transport': 850, 'activities': 1700},
+            'Agra': {'accommodation': 3000, 'food': 750, 'transport': 600, 'activities': 1450},
+            'Varanasi': {'accommodation': 2200, 'food': 650, 'transport': 500, 'activities': 1200},
+            'Jaipur': {'accommodation': 2800, 'food': 730, 'transport': 650, 'activities': 1500},
+            'Udaipur': {'accommodation': 3100, 'food': 760, 'transport': 650, 'activities': 1500}
+        }
+
+        rates = default_rates.copy()
+        if location in location_overrides:
+            rates.update(location_overrides[location])
+
+        participants = max(1, int(participants or 1))
+        duration = max(1, int(duration or 1))
+
+        per_person_daily = sum(rates.values())
+        per_person_total = per_person_daily * duration
+        total_cost = per_person_total * participants
+
+        return {
+            'per_person_daily': per_person_daily,
+            'per_person_total': per_person_total,
+            'total_cost': total_cost,
+            'breakdown': {
+                'accommodation': rates['accommodation'] * duration * participants,
+                'food': rates['food'] * duration * participants,
+                'transport': rates['transport'] * duration * participants,
+                'activities': rates['activities'] * duration * participants
+            },
+            'participants': participants,
+            'duration': duration,
+            'location': location
+        }
+
+    @staticmethod
     def _generate_location_based_activities(location, duration, attractions, restaurants):
         """Generate specific activities based on location data"""
         activities = {}
@@ -210,6 +262,16 @@ class ItineraryService:
             if day == 1:
                 notes.append("Take blessings at Hanuman Garhi")
 
+        # Generic tips for any location not specifically listed above
+        else:
+            if day == 1:
+                notes.append("Research local customs and etiquette before exploring")
+                notes.append("Check weather conditions and pack accordingly")
+            notes.append("Try local specialties and support local businesses")
+            notes.append("Learn a few basic phrases in the local language")
+            if day == total_days:
+                notes.append("Leave time for last-minute shopping and relaxation")
+
         # General tips for all locations
         if day == 1:
             notes.append("Check-in to hotel and freshen up")
@@ -240,6 +302,19 @@ class ItineraryService:
 
         db.session.commit()
         return itinerary
+
+    @staticmethod
+    def update_basic_itinerary(itinerary_id, title, location, duration, participants):
+        """Update basic itinerary information (title, location, duration, participants)"""
+        itinerary = Itinerary.query.get(itinerary_id)
+        if itinerary:
+            itinerary.title = title
+            itinerary.location = location
+            itinerary.duration = duration
+            itinerary.participants = participants
+            db.session.commit()
+            return True
+        return False
 
     @staticmethod
     def delete_itinerary(itinerary_id):

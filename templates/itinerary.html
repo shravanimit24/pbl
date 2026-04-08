@@ -7,13 +7,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: 0 auto;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
             padding: 20px;
-            background-image: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&q=80');
-            background-size: cover;
-            background-attachment: fixed;
             background-color: #f4f4f4;
+            box-sizing: border-box;
         }
         .container {
             background-color: rgba(255, 255, 255, 0.95);
@@ -22,15 +21,16 @@
             margin-bottom: 20px;
         }
         .header {
-            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-            color: white;
+            background: #f5f7f8 ;
+            color: rgb(7, 0, 0);
             padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid #619adb;
         }
         .header h1 {
-            margin: 0;
+            margin: 0; 
             font-size: 2.2em;
         }
         .header-info {
@@ -39,7 +39,7 @@
             opacity: 0.95;
         }
         .back-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #a5bcd1;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -58,11 +58,11 @@
             padding: 25px;
             margin: 20px 0;
             border-radius: 8px;
-            border-left: 5px solid #ff9800;
+            border-left: 5px solid #71a3ed;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
         .day-schedule h2 {
-            color: #d84315;
+            color: #546ed7;
             margin-top: 0;
             font-size: 1.5em;
         }
@@ -93,17 +93,17 @@
         .activity-slot input:focus,
         .activity-slot textarea:focus {
             outline: none;
-            border-color: #ff9800;
+            border-color: #5d99de;
             box-shadow: 0 0 5px rgba(255, 152, 0, 0.3);
         }
         .morning-slot {
-            border-left-color: #ff9800;
+            border-left-color: #619adb;
         }
         .afternoon-slot {
-            border-left-color: #fbc02d;
+            border-left-color: #619adb;
         }
         .evening-slot {
-            border-left-color: #9c27b0;
+            border-left-color: #619adb;
         }
         .activity-icon {
             font-size: 1.2em;
@@ -114,20 +114,22 @@
             padding: 15px;
             background: #fff3e0;
             border-radius: 5px;
-            border-left: 4px solid #ff6f00;
+            border-left: 4px solid #619adb;
         }
         .save-btn {
             background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
             color: white;
             padding: 12px 30px;
             border: none;
-            border-radius: 5px;
+            border-radius: 30px;
             cursor: pointer;
             font-size: 1em;
             font-weight: bold;
             transition: transform 0.2s ease;
-            margin-top: 20px;
-            width: 100%;
+            margin: 20px auto;
+            width: 40%;
+            display: block;
+           
         }
         .save-btn:hover {
             transform: scale(1.05);
@@ -150,35 +152,35 @@
             border-radius: 2px;
         }
         .legend-morning {
-            background-color: #ff9800;
+            background-color: #619adb;
         }
         .legend-afternoon {
-            background-color: #fbc02d;
+            background-color: #619adb;
         }
         .legend-evening {
-            background-color: #9c27b0;
+            background-color: #619adb;
         }
         .location-highlight {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            background: #f5f6f7;    
             padding: 20px;
             border-radius: 8px;
             margin: 20px 0;
             border-left: 5px solid #2196f3;
         }
         .location-highlight h3 {
-            color: #1565c0;
+            color: #111416;
             margin-top: 0;
             font-size: 1.3em;
         }
         .location-tips {
-            background: #fff3e0;
+            background: #ffffff;
             padding: 15px;
             border-radius: 5px;
             margin: 15px 0;
-            border-left: 4px solid #ff6f00;
+            border: 4px solid #619adb;
         }
         .location-tips h4 {
-            color: #e65100;
+            color: #050506;
             margin-top: 0;
             font-size: 1.1em;
         }
@@ -194,7 +196,7 @@
             margin-top: 5px;
         }
         .place-link {
-            color: #ff6f00;
+            color: #6f215e;
             text-decoration: none;
             font-weight: bold;
             transition: color 0.3s ease;
@@ -204,17 +206,20 @@
             text-decoration: underline;
         }
         .map-section {
-            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            background: #f5f7f7;
             padding: 25px;
             border-radius: 8px;
             margin: 20px 0;
-            border-left: 5px solid #9c27b0;
+            border-left: 5px solid #619adb;
             text-align: center;
         }
         .map-section h3 {
-            color: #7b1fa2;
+            color: rgb(8, 8, 8);
             margin-top: 0;
             font-size: 1.4em;
+        }
+        .map-section p {
+            color: rgb(10, 6, 6);
         }
         .map-links {
             display: flex;
@@ -224,7 +229,7 @@
             flex-wrap: wrap;
         }
         .map-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #a5bcd1;
             color: white;
             padding: 12px 20px;
             text-decoration: none;
@@ -235,24 +240,15 @@
         }
         .map-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
-        }
-        .google-maps {
-            background: linear-gradient(135deg, #4285f4 0%, #1a73e8 100%);
-        }
-        .google-maps:hover {
-            box-shadow: 0 4px 10px rgba(66, 133, 244, 0.4);
-        }
-        .open-street {
-            background: linear-gradient(135deg, #7cb342 0%, #558b2f 100%);
-        }
-        .open-street:hover {
-            box-shadow: 0 4px 10px rgba(124, 179, 66, 0.4);
+            box-shadow: 0 4px 10px rgba(165, 188, 209, 0.4);
         }
     </style>
 </head>
 <body>
-    <a href="/" class="back-btn">← Back to Home</a>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="/" class="back-btn">← Back to Home</a>
+        <a href="/edit_itinerary/{{ itinerary.id }}" class="edit-btn" style="background: #f39c12; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-left: 10px;">✏️ Edit Itinerary</a>
+    </div>
     
     <div class="container">
         <div class="header">
@@ -306,6 +302,8 @@
             <p><strong>🏛️ Highlights:</strong> Colonial architecture, cultural festivals, and street food.</p>
             {% elif itinerary.location == "Ayodhya" %}
             <p><strong>🙏 Highlights:</strong> Ram Janmabhoomi Temple, spiritual sites, and religious significance.</p>
+            {% elif itinerary.location == "Dehradun" %}
+            <p><strong>🏔️ Highlights:</strong> Himalayan foothills, colonial architecture, spiritual sites, and natural beauty.</p>
             {% else %}
             <p><strong>✨ Highlights:</strong> Explore the unique culture, attractions, and experiences of {{ itinerary.location }}.</p>
             {% endif %}
@@ -322,6 +320,31 @@
                     🌍 View on OpenStreetMap
                 </a>
             </div>
+        </div>
+
+        <div class="location-tips">
+            <h4>💰 Estimated Trip Cost</h4>
+            {% if cost_estimate %}
+            <ul>
+                <li><strong>Location:</strong> {{ cost_estimate['location'] }}</li>
+                <li><strong>Duration:</strong> {{ cost_estimate['duration'] }} day{{ 's' if cost_estimate['duration'] != 1 else '' }}</li>
+                <li><strong>Participants:</strong> {{ cost_estimate['participants'] }}</li>
+                <li><strong>Per person (daily):</strong> ₹{{ '{:,.0f}'.format(cost_estimate['per_person_daily']) }}</li>
+                <li><strong>Per person (total):</strong> ₹{{ '{:,.0f}'.format(cost_estimate['per_person_total']) }}</li>
+                <li><strong>Grand total:</strong> ₹{{ '{:,.0f}'.format(cost_estimate['total_cost']) }}</li>
+            </ul>
+            <div class="notes-section" style="padding: 15px; background: #fdfffd; border: 4px solid #619adb; margin-bottom: 15px;">
+                <h4 style="margin-top:0;">📌 Breakdown</h4>
+                <ul>
+                        <li>Accommodation: ₹{{ '{:,.0f}'.format(cost_estimate.breakdown['accommodation']) }}</li>
+                    <li>Food: ₹{{ '{:,.0f}'.format(cost_estimate.breakdown['food']) }}</li>
+                    <li>Transport: ₹{{ '{:,.0f}'.format(cost_estimate.breakdown['transport']) }}</li>
+                    <li>Activities: ₹{{ '{:,.0f}'.format(cost_estimate.breakdown['activities']) }}</li>
+                </ul>
+            </div>
+            {% else %}
+            <p>No cost estimate available yet. Add participant count in itinerary creation to get estimates.</p>
+            {% endif %}
         </div>
 
         <div class="legend">
@@ -345,7 +368,7 @@
                 <h2>Day {{ day.day_number }} of {{ itinerary.duration }}</h2>
                 
                 <div class="activity-slot morning-slot">
-                    <label><span class="activity-icon">🌅</span>Morning Activity</label>
+                    <label><span class="activity-icon"></span>Morning Activity</label>
                     {% if day.morning %}
                         <div class="activity-location">
                             {% if "Visit " in day.morning %}
@@ -552,6 +575,13 @@
                 <li><strong>Temple:</strong> Ram Janmabhoomi Temple visit</li>
                 <li><strong>Transport:</strong> Trains from major cities</li>
                 <li><strong>Culture:</strong> Deep spiritual significance</li>
+            </ul>
+            {% elif itinerary.location == "Dehradun" %}
+            <ul>
+                <li><strong>Best Time:</strong> March to June, September to November</li>
+                <li><strong>Transport:</strong> Well connected by road and rail</li>
+                <li><strong>Cuisine:</strong> Try Garhwali food and local street food</li>
+                <li><strong>Activities:</strong> Trekking, cave exploration, and nature walks</li>
             </ul>
             {% else %}
             <ul>

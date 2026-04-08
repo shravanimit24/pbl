@@ -440,13 +440,78 @@ class LocationService:
                 {"name": "Hotel Sita", "type": "mid-range", "area": "Ayodhya"},
                 {"name": "Clarks Inn", "type": "business", "area": "Ayodhya"}
             ]
+        },
+        "Dehradun": {
+            "attractions": [
+                {"name": "Robber's Cave (Guchhupani)", "type": "cave", "description": "Natural limestone cave with underground waterfalls"},
+                {"name": "Sahastradhara", "type": "waterfall", "description": "Sulfur springs and waterfall with therapeutic waters"},
+                {"name": "Forest Research Institute", "type": "museum", "description": "Largest museum of its kind with colonial architecture"},
+                {"name": "Clock Tower", "type": "monument", "description": "Historic clock tower in the city center"},
+                {"name": "Tapkeshwar Temple", "type": "temple", "description": "Ancient cave temple dedicated to Lord Shiva"},
+                {"name": "Malsi Deer Park", "type": "park", "description": "Wildlife park with deer and other animals"},
+                {"name": "Rajaji National Park", "type": "national_park", "description": "Tiger reserve and wildlife sanctuary"},
+                {"name": "Mindrolling Monastery", "type": "monastery", "description": "Largest Buddhist monastery in India"}
+            ],
+            "restaurants": [
+                {"name": "Ellora's", "cuisine": "Multi-cuisine", "description": "Popular restaurant with local and international dishes"},
+                {"name": "The Good Earth", "cuisine": "Cafe", "description": "Organic cafe with healthy food options"},
+                {"name": "Chakrata Road Food Street", "cuisine": "Street Food", "description": "Local street food and Garhwali cuisine"}
+            ],
+            "hotels": [
+                {"name": "Hotel Madhuban", "type": "heritage", "area": "Hathibarkala"},
+                {"name": "The Orchard", "type": "boutique", "area": "Rajpur Road"},
+                {"name": "Ramana Residency", "type": "business", "area": "Rajpur Road"}
+            ]
         }
     }
 
     @staticmethod
     def get_location_data(destination):
         """Get location data for a specific destination"""
-        return LocationService.LOCATION_DATABASE.get(destination, {})
+        # First check if we have specific data for this destination
+        data = LocationService.LOCATION_DATABASE.get(destination, {})
+
+        # If no specific data exists, generate generic but detailed data
+        if not data:
+            data = LocationService._generate_generic_location_data(destination)
+
+        return data
+
+    @staticmethod
+    def _generate_generic_location_data(destination):
+        """Generate generic location data for any destination"""
+        # Common attraction types that work for most destinations
+        generic_attractions = [
+            {"name": f"City Center of {destination}", "type": "urban", "description": "Explore the heart of the city with local markets and architecture"},
+            {"name": f"Local Museum in {destination}", "type": "cultural", "description": "Discover the history and culture through exhibits and artifacts"},
+            {"name": f"Scenic Park in {destination}", "type": "nature", "description": "Relax in green spaces with walking paths and picnic areas"},
+            {"name": f"Historic District of {destination}", "type": "historical", "description": "Walk through preserved areas showcasing the city's heritage"},
+            {"name": f"Local Market in {destination}", "type": "market", "description": "Experience authentic shopping and local crafts"},
+            {"name": f"Nature Spot near {destination}", "type": "nature", "description": "Enjoy outdoor activities and scenic views"},
+            {"name": f"Cultural Site in {destination}", "type": "cultural", "description": "Visit important landmarks and learn about local traditions"},
+            {"name": f"Waterfront Area of {destination}", "type": "waterfront", "description": "Enjoy views and activities by the water"}
+        ]
+
+        # Common restaurant types
+        generic_restaurants = [
+            {"name": f"Traditional Restaurant in {destination}", "cuisine": "Local", "description": "Authentic local cuisine and specialties"},
+            {"name": f"Modern Cafe in {destination}", "cuisine": "International", "description": "Contemporary dining with global influences"},
+            {"name": f"Street Food Vendor in {destination}", "cuisine": "Street Food", "description": "Try popular local street food and snacks"},
+            {"name": f"Fine Dining in {destination}", "cuisine": "Fusion", "description": "Elegant dining experience with creative dishes"}
+        ]
+
+        # Generic hotels
+        generic_hotels = [
+            {"name": f"Central Hotel in {destination}", "type": "mid-range", "area": "City Center"},
+            {"name": f"Boutique Stay in {destination}", "type": "boutique", "area": "Historic District"},
+            {"name": f"Luxury Resort in {destination}", "type": "luxury", "area": "Scenic Area"}
+        ]
+
+        return {
+            "attractions": generic_attractions,
+            "restaurants": generic_restaurants,
+            "hotels": generic_hotels
+        }
 
     @staticmethod
     def get_attractions(destination, limit=None):

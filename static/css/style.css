@@ -1,0 +1,13 @@
+/* Main stylesheet for Travel Blog */
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-image: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&q=80');
+    background-size: cover;
+    background-attachment: fixed;
+    background-color: #f4f4f4;
+}
+
+/* Add your custom styles here */

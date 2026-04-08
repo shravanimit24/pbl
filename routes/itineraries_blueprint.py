@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, jsonify
 from flask_login import login_required
 from services.itinerary_service import ItineraryService
+from services.location_service import LocationService
 from models import Itinerary, db
 
 itineraries_bp = Blueprint('itineraries', __name__)
@@ -16,13 +17,47 @@ def home():
 def reports():
     total_itineraries = Itinerary.query.count()
     total_participants = db.session.query(db.func.sum(Itinerary.participants)).scalar() or 0
-    # Add more stats as needed
-    return render_template('reports.html', total_itineraries=total_itineraries, total_participants=total_participants)
+    
+    # Destination Analytics
+    popular_dest = db.session.query(Itinerary.location, db.func.count(Itinerary.location))\
+        .group_by(Itinerary.location)\
+        .order_by(db.func.count(Itinerary.location).desc())\
+        .first()
+    most_popular_destination = popular_dest[0] if popular_dest else "None"
+    
+    unique_destinations = db.session.query(Itinerary.location)\
+        .distinct()\
+        .count()
+    
+    # Advanced Metrics
+    avg_duration = db.session.query(db.func.avg(Itinerary.duration)).scalar() or 0
+    total_days_planned = db.session.query(db.func.sum(Itinerary.duration)).scalar() or 0
+    
+    from datetime import datetime
+    current_month = datetime.utcnow().month
+    current_year = datetime.utcnow().year
+    trips_this_month = Itinerary.query.filter(
+        db.extract('month', Itinerary.created_date) == current_month,
+        db.extract('year', Itinerary.created_date) == current_year
+    ).count()
+    
+    return render_template('reports.html', 
+        total_itineraries=total_itineraries,
+        total_participants=total_participants,
+        most_popular_destination=most_popular_destination,
+        unique_destinations=unique_destinations,
+        avg_duration=round(avg_duration, 1),
+        total_days_planned=total_days_planned,
+        trips_this_month=trips_this_month
+    )
 
 @itineraries_bp.route('/create_itinerary')
 @login_required
 def create_itinerary_page():
-    return render_template('create_itinerary.html')
+    # Get all available locations from the database
+    locations = list(LocationService.LOCATION_DATABASE.keys())
+    locations.sort()  # Sort alphabetically
+    return render_template('create_itinerary.html', locations=locations)
 
 @itineraries_bp.route('/generate_itinerary', methods=['POST'])
 @login_required
@@ -49,7 +84,12 @@ def view_itinerary(itinerary_id):
     if not itinerary:
         return redirect('/')
     days = itinerary.duration
-    return render_template('itinerary.html', itinerary=itinerary, days=days)
+    cost_estimate = ItineraryService.estimate_cost(
+        itinerary.location,
+        itinerary.duration,
+        itinerary.participants
+    )
+    return render_template('itinerary.html', itinerary=itinerary, days=days, cost_estimate=cost_estimate)
 
 @itineraries_bp.route('/update_itinerary/<int:itinerary_id>', methods=['POST'])
 @login_required
@@ -69,6 +109,32 @@ def update_itinerary(itinerary_id):
     if ItineraryService.update_itinerary_days(itinerary_id, day_updates):
         return redirect('/itinerary/{}'.format(itinerary_id))
     return jsonify({'error': 'Itinerary not found'}), 404
+
+@itineraries_bp.route('/edit_itinerary/<int:itinerary_id>')
+@login_required
+def edit_itinerary_page(itinerary_id):
+    itinerary = ItineraryService.get_itinerary_by_id(itinerary_id)
+    if not itinerary:
+        return redirect('/')
+    # Get all available locations from the database
+    locations = list(LocationService.LOCATION_DATABASE.keys())
+    locations.sort()  # Sort alphabetically
+    return render_template('edit_itinerary.html', itinerary=itinerary, locations=locations)
+
+@itineraries_bp.route('/update_basic_itinerary/<int:itinerary_id>', methods=['POST'])
+@login_required
+def update_basic_itinerary(itinerary_id):
+    try:
+        title = request.form.get('title')
+        location = request.form.get('location')
+        duration = int(request.form.get('duration', 3))
+        participants = int(request.form.get('participants', 0))
+        
+        if ItineraryService.update_basic_itinerary(itinerary_id, title, location, duration, participants):
+            return redirect('/itinerary/{}'.format(itinerary_id))
+        return jsonify({'error': 'Itinerary not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 @itineraries_bp.route('/delete_itinerary/<int:itinerary_id>', methods=['POST'])
 @login_required
