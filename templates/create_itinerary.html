@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Itinerary</title>
+</head>
+<body>
+    <h1>Create New Itinerary</h1>
+    <form action="{{ url_for('itineraries.generate_itinerary') }}" method="POST">
+        <label for="itinerary_title">Title:</label>
+        <input type="text" id="itinerary_title" name="itinerary_title" required><br>
+        <label for="itinerary_location">Location:</label>
+        <input type="text" id="itinerary_location" name="itinerary_location" required><br>
+        <label for="itinerary_days">Duration (days):</label>
+        <input type="number" id="itinerary_days" name="itinerary_days" value="3" required><br>
+        <label for="participants">Number of Participants:</label>
+        <input type="number" id="participants" name="participants" value="0"><br>
+        <button type="submit">Create Itinerary</button>
+    </form>
+    <a href="{{ url_for('itineraries.home') }}">Back to Home</a>
+</body>
+</html>

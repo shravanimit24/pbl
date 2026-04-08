@@ -192,49 +192,10 @@
     <h1>🗺️ Travello - Your Travel Buddy</h1>
     
     <div class="container">
-        <div class="form-container">
-            <h2>🎯 Create Your Perfect Itinerary</h2>
-            <form method="POST" action="/generate_itinerary">
-                <label for="itinerary_title">📝 Itinerary Title:</label>
-                <input type="text" name="itinerary_title" placeholder="e.g., Goa Beach Adventure" required>
-                
-                <label for="itinerary_location">📍 Destination:</label>
-                <select name="itinerary_location" id="itinerary_location" required>
-                    <option value="">-- Choose your destination --</option>
-                    <option value="Goa">Goa</option>
-                    <option value="Kerala">Kerala</option>
-                    <option value="Rajasthan">Rajasthan</option>
-                    <option value="Himachal Pradesh">Himachal Pradesh</option>
-                    <option value="Uttarakhand">Uttarakhand</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Delhi">Delhi</option>
-                    <option value="Agra">Agra</option>
-                    <option value="Varanasi">Varanasi</option>
-                    <option value="Jaipur">Jaipur</option>
-                    <option value="Udaipur">Udaipur</option>
-                    <option value="Pondicherry">Pondicherry</option>
-                    <option value="Shimla">Shimla</option>
-                    <option value="Manali">Manali</option>
-                    <option value="Leh Ladakh">Leh Ladakh</option>
-                    <option value="Kashmir">Kashmir</option>
-                    <option value="Bangalore">Bangalore</option>
-                    <option value="Chennai">Chennai</option>
-                    <option value="Kolkata">Kolkata</option>
-                    <option value="Ayodhya">Ayodhya</option>
-                </select>
-                
-                <label for="itinerary_days">📅 Duration:</label>
-                <select name="itinerary_days" id="itinerary_days" required>
-                    <option value="1">1 Day</option>
-                    <option value="2">2 Days</option>
-                    <option value="3" selected>3 Days</option>
-                    <option value="4">4 Days</option>
-                    <option value="5">5 Days</option>
-                    <option value="7">7 Days</option>
-                </select>
-                
-                <button type="submit">🚀 Generate Itinerary</button>
-            </form>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a href="{{ url_for('itineraries.create_itinerary_page') }}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; margin: 5px;">Create New Itinerary</a>
+            <a href="{{ url_for('itineraries.reports') }}" style="background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; margin: 5px;">View Reports</a>
+            <a href="{{ url_for('auth.logout') }}" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; margin: 5px;">Logout</a>
         </div>
 
         <h2>📋 Your Itineraries</h2>

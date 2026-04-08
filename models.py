@@ -1,7 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 from datetime import datetime
 
 db = SQLAlchemy()
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(150), nullable=False)
 
 class Itinerary(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -10,6 +16,7 @@ class Itinerary(db.Model):
     duration = db.Column(db.Integer, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.utcnow)
     activities = db.Column(db.Text, nullable=False)
+    participants = db.Column(db.Integer, default=0)  # Number of people gone
     days = db.relationship('ItineraryDay', backref='itinerary', cascade='all, delete-orphan')
 
     def to_dict(self):
@@ -20,6 +27,7 @@ class Itinerary(db.Model):
             'duration': self.duration,
             'created_date': self.created_date.isoformat() if self.created_date else None,
             'activities': self.activities,
+            'participants': self.participants,
             'days': [day.to_dict() for day in self.days]
         }
 
